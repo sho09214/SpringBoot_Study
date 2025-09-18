@@ -2,32 +2,29 @@ package com.example.SpringBoot_Study.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
-public class Post {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
     private String content;
+
     private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updateAt = LocalDateTime.now();
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = true)
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
-
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
 
     @PrePersist
     public void onCreate() {
@@ -36,6 +33,6 @@ public class Post {
 
     @PreUpdate
     public void onUpdate() {
-        updateAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 }

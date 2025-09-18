@@ -1,6 +1,8 @@
 package com.example.SpringBoot_Study.service;
 
+import com.example.SpringBoot_Study.model.Comment;
 import com.example.SpringBoot_Study.model.Post;
+import com.example.SpringBoot_Study.model.User;
 import com.example.SpringBoot_Study.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,5 +34,16 @@ public class PostService {
 
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    public boolean verifyOwnership(Post post, User user) {
+        if (post.getUser() == null) {
+            return false;
+        }
+
+        if (!post.getUser().getId().equals(user.getId())) {
+            return false;
+        }
+        return true;
     }
 }
