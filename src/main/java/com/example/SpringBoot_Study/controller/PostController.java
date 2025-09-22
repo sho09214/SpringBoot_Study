@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/posts")
 public class PostController {
@@ -26,12 +28,22 @@ public class PostController {
 
     //一覧表示
     @GetMapping
-    public String listPosts(Model model) {
+    public String listPosts(Model model,
+                            @RequestParam(value = "keyword", required = false) String keyword,
+                            @RequestParam(value = "matchType", required = false) String matchType) {
         //ログインユーザーチェック
         User loggedInUser = userService.getCurrentUser();
-
-        model.addAttribute("posts", postService.findAll());
         model.addAttribute("loggedInUserId", loggedInUser.getId());
+
+        //検索フォームの入力値
+        List<Post> posts;
+        if (keyword != null && !keyword.isEmpty() && matchType != null && !matchType.isEmpty()) {
+            posts = postService.searchPosts(keyword, matchType);
+        } else {
+            posts = postService.findAll();
+        }
+
+        model.addAttribute("posts", posts);
         return "posts/list";
     }
 

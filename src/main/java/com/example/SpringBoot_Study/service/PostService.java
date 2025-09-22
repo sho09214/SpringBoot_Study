@@ -46,4 +46,16 @@ public class PostService {
         }
         return true;
     }
+
+    public List<Post> searchPosts(String keyword, String matchType) {
+        switch (matchType) {
+            case "startswith":
+                return repository.findByTitleStartingWithOrContainingStartingWith(keyword, keyword);
+            case "endswith":
+                return repository.findByTitleEndingWithOrContainingEndingWith(keyword, keyword);
+            case "contains":
+            default:
+                return repository.findByTitleContainingOrContentContaining(keyword, keyword);
+        }
+    }
 }
