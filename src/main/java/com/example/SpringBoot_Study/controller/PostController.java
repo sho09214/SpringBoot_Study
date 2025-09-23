@@ -30,6 +30,8 @@ public class PostController {
     @GetMapping
     public String listPosts(Model model,
                             @RequestParam(value = "keyword", required = false) String keyword,
+                            @RequestParam(value = "sortBy", required = false, defaultValue = "createdAt") String sortBy,
+                            @RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder,
                             @RequestParam(value = "matchType", required = false) String matchType) {
         //ログインユーザーチェック
         User loggedInUser = userService.getCurrentUser();
@@ -38,9 +40,9 @@ public class PostController {
         //検索フォームの入力値
         List<Post> posts;
         if (keyword != null && !keyword.isEmpty() && matchType != null && !matchType.isEmpty()) {
-            posts = postService.searchPosts(keyword, matchType);
+            posts = postService.searchPosts(keyword, matchType, sortBy, sortOrder);
         } else {
-            posts = postService.findAll();
+            posts = postService.findAll(sortBy, sortOrder);
         }
 
         model.addAttribute("posts", posts);
