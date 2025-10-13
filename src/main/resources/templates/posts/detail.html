@@ -15,6 +15,10 @@
         <button type="submit" class="btn btn-danger">Delete</button>
       </form>
     </span>
+    <!--いいねボタン-->
+    <form th:action="@{/posts/{id}/like(id=${post.id})}" method="post">
+      <button type="submit" class="btn btn-danger">いいね</button>
+    </form>
 
     <h2>Comments</h2>
     <!--コメント一覧-->
